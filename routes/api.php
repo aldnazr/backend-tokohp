@@ -18,6 +18,6 @@ Route::get('/staffs', [StaffController::class, 'index']);
 
 // Brand Routes
 Route::get('/brands', [BrandController::class, 'index']);
-Route::post('/brands', [BrandController::class, 'store']);
-Route::put('/brands/{id}', [BrandController::class, 'update']);
+Route::get('/brands/insert', [BrandController::class, 'insert']);
+Route::get('/brands/update', [BrandController::class, 'update']);
 Route::delete('/brands/{id}', [BrandController::class, 'destroy']);

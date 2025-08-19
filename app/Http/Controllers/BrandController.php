@@ -7,40 +7,50 @@ use Illuminate\Http\Request;
 
 class BrandController extends Controller
 {
-    // Create
-    public function store(Request $request)
-    {
-        // validasi
-        $validated = $request->validate([
-            'NAMA_BRAND' => 'required|string|max:100|unique:brand,NAMA_BRAND',
-        ]);
-
-        // simpan ke DB
-        $brand = Brand::create($validated);
-
-        return response()->json([
-            'message' => 'Brand berhasil dibuat',
-            'data' => $brand
-        ], 201);
-    }
-
     // Read
     public function index()
     {
         return Brand::orderBy('id_brand')->get();
     }
 
-    // Update
-    public function update(Request $request, $id)
+    // Create
+    public function insert(Request $request)
     {
+        $name = $request->query('name');
+
+        // insert ke database
+        $brand = Brand::create([
+            'NAMA_BRAND' => $name
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'data' => $brand,
+        ]);
+    }
+
+    // Update
+    public function update(Request $request)
+    {
+        $id = $request->query('id');
+        $name = $request->query('name');
+
         $brand = Brand::findOrFail($id);
 
+        $request->merge([
+            'NAMA_BRAND' => $name
+        ]);
+
         $validated = $request->validate([
-            'NAMA_BRAND' => 'required|string|unique:brand,NAMA_BRAND,' . $id . ',ID_BRAND',
+            'NAMA_BRAND' => 'required|string|unique:brands,NAMA_BRAND,' . $id . ',ID_BRAND',
         ]);
 
         $brand->update($validated);
-        return response()->json($brand);
+
+        return response()->json([
+            'message' => 'Brand berhasil diupdate',
+            'data' => $brand
+        ], 202);
     }
 
     // Delete
@@ -48,6 +58,6 @@ class BrandController extends Controller
     {
         $brand = Brand::findOrFail($id);
         $brand->delete();
-        return response()->json(null, 204);
+        return response()->json(status: 204);
     }
 }
