@@ -12,6 +12,11 @@ return Application::configure(basePath: dirname(__DIR__))
         api: __DIR__ . '/../routes/api.php'
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->appendToGroup(
+            'api',
+            \Illuminate\Http\Middleware\HandleCors::class
+        );
+
         $middleware->api(prepend: [
             \Illuminate\Http\Middleware\HandleCors::class,
         ]);

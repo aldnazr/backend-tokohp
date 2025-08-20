@@ -13,6 +13,7 @@ Route::get('/transaction/insert', [TransactionController::class, 'insert']);
 Route::get('/histories', [HistoryController::class, 'index']);
 
 Route::get('/phones', [PhoneController::class, 'index']);
+Route::post('/phones', [PhoneController::class, 'insert']);
 
 Route::get('/staffs', [StaffController::class, 'index']);
 
