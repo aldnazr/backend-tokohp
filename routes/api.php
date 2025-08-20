@@ -8,7 +8,7 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\TransactionController;
 
 // Transaksi Routes
-Route::post('/transactions', [TransactionController::class, 'store']);
+Route::get('/transaction/insert', [TransactionController::class, 'insert']);
 
 Route::get('/histories', [HistoryController::class, 'index']);
 

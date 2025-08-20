@@ -61,4 +61,53 @@ class TransactionController extends Controller
             ], 500);
         }
     }
+
+    public function insert(Request $request)
+    {
+        $id_user        = $request->query('id_user');
+        $nama_pelanggan = $request->query('nama_pelanggan');
+        $phones         = $request->query('phones', []);   // array id_phone
+        $jumlahs        = $request->query('jumlah', []);   // array jumlah
+        $hargas         = $request->query('harga', []);    // array harga
+
+        $tanggal  = now();
+        $total    = 0;
+
+        // hitung total harga dulu
+        foreach ($phones as $i => $id_phone) {
+            $jumlah   = $jumlahs[$i] ?? 0;
+            $harga    = $hargas[$i] ?? 0;
+            $subtotal = $jumlah * $harga;
+            $total   += $subtotal;
+        }
+
+        // insert ke transaksi
+        $id_transaksi = DB::table('transaksi')->insertGetId([
+            'id_user'        => $id_user,
+            'nama_pelanggan' => $nama_pelanggan,
+            'tanggal'        => $tanggal,
+            'total_harga'    => $total,
+        ]);
+
+        // insert ke detail_transaksi
+        foreach ($phones as $i => $id_phone) {
+            $jumlah   = $jumlahs[$i] ?? 0;
+            $harga    = $hargas[$i] ?? 0;
+            $subtotal = $jumlah * $harga;
+
+            DB::table('detail_transaksi')->insert([
+                'id_transaksi'     => $id_transaksi,
+                'id_phone'         => $id_phone,
+                'harga_barang'     => $harga,
+                'jumlah_pembelian' => $jumlah,
+                'subtotal'         => $subtotal,
+            ]);
+        }
+
+        return response()->json([
+            'success'      => true,
+            'id_transaksi' => $id_transaksi,
+            'total_harga'  => $total,
+        ]);
+    }
 }
