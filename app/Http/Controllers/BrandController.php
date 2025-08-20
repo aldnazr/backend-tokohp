@@ -16,7 +16,7 @@ class BrandController extends Controller
     // Create
     public function insert(Request $request)
     {
-        $name = $request->query('name');
+        $name = $request->input('NAMA_BRAND');
 
         // insert ke database
         $brand = Brand::create([
@@ -30,22 +30,13 @@ class BrandController extends Controller
     }
 
     // Update
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
-        $id = $request->query('id');
-        $name = $request->query('name');
-
         $brand = Brand::findOrFail($id);
 
-        $request->merge([
-            'NAMA_BRAND' => $name
+        $brand->update([
+            'NAMA_BRAND' => $request->input('NAMA_BRAND')
         ]);
-
-        $validated = $request->validate([
-            'NAMA_BRAND' => 'required|string|unique:brands,NAMA_BRAND,' . $id . ',ID_BRAND',
-        ]);
-
-        $brand->update($validated);
 
         return response()->json([
             'message' => 'Brand berhasil diupdate',
