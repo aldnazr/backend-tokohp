@@ -8,12 +8,14 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\TransactionController;
 
 // Transaksi Routes
-Route::get('/transaction/insert', [TransactionController::class, 'insert']);
+Route::get('/transaction', [TransactionController::class, 'index']);
+Route::post('/transaction', [TransactionController::class, 'insert']);
 
 Route::get('/histories', [HistoryController::class, 'index']);
 
 Route::get('/phones', [PhoneController::class, 'index']);
 Route::post('/phones', [PhoneController::class, 'insert']);
+Route::delete('/phones/{id}', [PhoneController::class, 'insert']);
 
 Route::get('/staffs', [StaffController::class, 'index']);
 

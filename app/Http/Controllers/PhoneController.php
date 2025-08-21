@@ -12,7 +12,6 @@ class PhoneController extends Controller
         return DB::table('phones')
             ->join('brands', 'phones.id_brand', '=', 'brands.id_brand')
             ->select('*')
-            ->where('phones.stok', '>', 0)
             ->get();
     }
 
@@ -33,5 +32,18 @@ class PhoneController extends Controller
             'id'      => $id,
             'message' => 'Phone berhasil ditambahkan'
         ], 201);
+    }
+
+    public function delete($id)
+    {
+        $deleted = DB::table('phones')
+            ->where('ID_PHONE', $id)
+            ->delete();
+
+        if ($deleted) {
+            return response()->json(null, 204);
+        }
+
+        return response()->json(['message' => 'Not Found'], 404);
     }
 }

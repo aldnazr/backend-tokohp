@@ -45,7 +45,7 @@ class BrandController extends Controller
     }
 
     // Delete
-    public function destroy($id)
+    public function delete($id)
     {
         $brand = Brand::findOrFail($id);
         $brand->delete();
