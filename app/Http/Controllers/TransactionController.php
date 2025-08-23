@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Phone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -21,9 +22,8 @@ class TransactionController extends Controller
         $id_user        = $request->input('id_user');
         $nama_pelanggan = $request->input('nama_pelanggan');
         $total          = $request->input('total_harga');
-        $items          = $request->input('items', []);  // array of objects
-
-        $tanggal = now();
+        $items          = $request->input('items', []);
+        $tanggal        = now();
 
         // insert transaksi
         $id_transaksi = DB::table('transaksi')->insertGetId([
@@ -46,6 +46,9 @@ class TransactionController extends Controller
                 'jumlah_pembelian' => $jumlah,
                 'subtotal'         => $subtotal,
             ]);
+
+            Phone::where('ID_PHONE', $item['id_phone'])
+                ->decrement('STOK', $jumlah);
         }
 
         return response()->json([
