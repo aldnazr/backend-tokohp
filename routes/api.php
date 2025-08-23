@@ -15,7 +15,8 @@ Route::get('/histories', [HistoryController::class, 'index']);
 
 Route::get('/phones', [PhoneController::class, 'index']);
 Route::post('/phones', [PhoneController::class, 'insert']);
-Route::delete('/phones/{id}', [PhoneController::class, 'insert']);
+Route::put('/phones/{id}', [PhoneController::class, 'update']);
+Route::delete('/phones/{id}', [PhoneController::class, 'delete']);
 
 Route::get('/staffs', [StaffController::class, 'index']);
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Phone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -18,7 +19,7 @@ class PhoneController extends Controller
     public function insert(Request $request)
     {
         // Langsung ambil input dari request
-        $id = DB::table('phones')->insertGetId([
+        $id = Phone::insertGetId([
             'ID_BRAND'       => $request->input('ID_BRAND'),
             'NAMA_HANDPHONE' => $request->input('NAMA_HANDPHONE'),
             'HARGA'          => $request->input('HARGA'),
@@ -32,6 +33,24 @@ class PhoneController extends Controller
             'id'      => $id,
             'message' => 'Phone berhasil ditambahkan'
         ], 201);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $phone = Phone::findOrFail($id);
+
+        $phone->update([
+            'NAMA_BRAND' => $request->input('NAMA_BRAND'),
+            'NAMA_HANDPHONE' => $request->input('NAMA_HANDPHONE'),
+            'DESKRIPSI' => $request->input('DESKRIPSI'),
+            'HARGA' => $request->input('HARGA'),
+            'STOK' => $request->input('STOK')
+        ]);
+
+        return response()->json([
+            'message' => 'Phone berhasil diupdate',
+            'data' => $phone
+        ], 202);
     }
 
     public function delete($id)
